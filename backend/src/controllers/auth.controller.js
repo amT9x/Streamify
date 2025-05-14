@@ -105,3 +105,39 @@ export function logout(req, res) {
     res.clearCookie('jwt');
     res.status(200).json({ success: true, message: 'Logout successfully!' });
 }
+
+//export funtion onboard
+export async function onboard(req, res) {
+    try {
+        const userId = req.user._id;
+        const { fullName, nativeLanguage, learningLanguage, location, bio } = req.body;
+        
+        // Kiểm tra thông tin nhập vào có thiếu trường nào không?
+        if (!fullName || !nativeLanguage || !learningLanguage || !location || !bio) {
+            return res.status(400).json({ 
+                message: 'Please fill all the fields!' ,
+                missingFields: [
+                    !fullName && "fullName",
+                    !nativeLanguage && "nativeLanguage",
+                    !learningLanguage && "learningLanguage",
+                    !location && "location",
+                    !bio && "bio"
+                ].filter(Boolean), // Lọc các trường không hợp lệ
+            });
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(userId, {
+            ...req.body,
+            isOnBoarded: true
+        }, {new: true});
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found!' });
+        }
+
+        res.status(200).json({ success: true, user: updatedUser });
+    } catch (error) {
+        console.log('Error in onboard controller:', error);
+        res.status(500).json({ message: 'Internal server error!' });
+    }
+}
