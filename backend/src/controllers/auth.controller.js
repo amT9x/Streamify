@@ -4,27 +4,27 @@ import jwt from 'jsonwebtoken';
 
 export async function signup(req, res) {
     // Lấy thông tin từ client
-    const {email, password, fullName} = req.body;
+    const { email, password, fullName } = req.body;
 
     // Kiểm tra thông tin
-    try{
-        if(!email || !password || !fullName){
-            return res.status(400).json({message: 'Please fill all the fields!'});
+    try {
+        if (!email || !password || !fullName) {
+            return res.status(400).json({ message: 'Please fill all the fields!' });
         }
 
-        if (password.length < 6){
-            return res.status(400).json({message: 'Password must be at least 6 characters!'});
+        if (password.length < 6) {
+            return res.status(400).json({ message: 'Password must be at least 6 characters!' });
         }
 
         // Kiểm tra định dạng email
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)){
-            return res.status(400).json({message: 'Email is not valid!'});
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ message: 'Email is not valid!' });
         }
 
-        const existingUser = await User.findOne({email});
-        if (existingUser){
-            return res.status(400).json({message: 'Email already exists, please use another one!'});
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ message: 'Email already exists, please use another one!' });
         }
 
         const idx = Math.floor(Math.random() * 100) + 1;
@@ -48,7 +48,7 @@ export async function signup(req, res) {
             console.log('Error creating user stream in controller:', error);
         }
 
-        const token = jwt.sign({id: newUser._id}, process.env.JWT_SECRET_KEY, {expiresIn: '7d'});
+        const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: '7d' });
 
         // Với cookie này, trình duyệt sẽ tự động gửi JWT trong các request tiếp theo đến server, nhưng không thể bị đánh cắp bởi JavaScript hoặc bên thứ ba.
         res.cookie('jwt', token, {
@@ -58,25 +58,25 @@ export async function signup(req, res) {
             sameSite: 'strict', // Chỉ gửi cookie khi request đến từ cùng domain -> chống tấn công CSRF
         });
 
-        res.status(201).json({success:true, user: newUser});
+        res.status(201).json({ success: true, user: newUser });
 
-    } catch (error){
+    } catch (error) {
         console.error("Error in SignUp controller: ", error);
-        res.status(500).json({message: 'Internal Server error!'});
+        res.status(500).json({ message: 'Internal Server error!' });
     }
 }
 
 export async function login(req, res) {
-    try{
-        const {email, password} = req.body;
+    try {
+        const { email, password } = req.body;
 
-        if (!email || !password){
-            return res.status(400).json({message: 'Please fill all the fields!'});
+        if (!email || !password) {
+            return res.status(400).json({ message: 'Please fill all the fields!' });
         }
 
-        const user = await User.findOne({email});
-        if (!user){
-            return res.status(400).json({message: 'Email or password is incorrect!'});
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ message: 'Email or password is incorrect!' });
         }
 
 
@@ -111,11 +111,11 @@ export async function onboard(req, res) {
     try {
         const userId = req.user._id;
         const { fullName, nativeLanguage, learningLanguage, location, bio } = req.body;
-        
+
         // Kiểm tra thông tin nhập vào có thiếu trường nào không?
         if (!fullName || !nativeLanguage || !learningLanguage || !location || !bio) {
-            return res.status(400).json({ 
-                message: 'Please fill all the fields!' ,
+            return res.status(400).json({
+                message: 'Please fill all the fields!',
                 missingFields: [
                     !fullName && "fullName",
                     !nativeLanguage && "nativeLanguage",
@@ -129,10 +129,22 @@ export async function onboard(req, res) {
         const updatedUser = await User.findByIdAndUpdate(userId, {
             ...req.body,
             isOnBoarded: true
-        }, {new: true});
+        }, { new: true });
 
         if (!updatedUser) {
             return res.status(404).json({ message: 'User not found!' });
+        }
+
+        // update user stream
+        try {
+            await upsertStreamUser({
+                id: updatedUser._id.toString(),
+                name: updatedUser.fullName,
+                image: updatedUser.profilePicture || '',
+            });
+            console.log(`Stream user updated successfully for: ${updatedUser.fullName}`);
+        } catch (streamError) {
+            console.log('Error updating user stream in controller:', streamError.message);
         }
 
         res.status(200).json({ success: true, user: updatedUser });
