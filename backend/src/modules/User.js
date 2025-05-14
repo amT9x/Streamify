@@ -51,7 +51,14 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 
+// So sánh mật khẩu
 userSchema.pre("save", async function (next) {
+    // Nếu mật khẩu không thay đổi thì không cần mã hóa lại
+    if(!this.isModified("password")) {
+        return next(); // Không cần làm gì nếu không thay đổi
+    }
+
+    // Nếu có thay đổi thì tiến hành mã hóa
     try{
         const salt = await bcrypt.genSalt(10);
         this.password = await bcrypt.hash(this.password, salt);
