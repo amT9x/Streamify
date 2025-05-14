@@ -1,3 +1,4 @@
+import { upsertStreamUser } from '../lib/stream.js';
 import User from '../modules/User.js';
 import jwt from 'jsonwebtoken';
 
@@ -35,6 +36,18 @@ export async function signup(req, res) {
             profilePicture: ramdomAvartar,
         });
 
+        try {
+            await upsertStreamUser({
+                id: newUser._id.toString(),
+                name: newUser.fullName,
+                image: newUser.profilePicture,
+                role: 'user',
+            })
+            console.log(`User stream created successfully ${newUser.fullName}`);
+        } catch (error) {
+            console.log('Error creating user stream in controller:', error);
+        }
+
         const token = jwt.sign({id: newUser._id}, process.env.JWT_SECRET_KEY, {expiresIn: '7d'});
 
         // Với cookie này, trình duyệt sẽ tự động gửi JWT trong các request tiếp theo đến server, nhưng không thể bị đánh cắp bởi JavaScript hoặc bên thứ ba.
@@ -65,14 +78,14 @@ export async function login(req, res) {
         if (!user){
             return res.status(400).json({message: 'Email or password is incorrect!'});
         }
-        
+
 
         const isMatch = await user.matchPassword(password);
-        if (!isMatch){
-            return res.status(400).json({message: 'Email or password is incorrect!'});
+        if (!isMatch) {
+            return res.status(400).json({ message: 'Email or password is incorrect!' });
         }
 
-        const token = jwt.sign({id: user._id}, process.env.JWT_SECRET_KEY, {expiresIn: '7d'});
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: '7d' });
 
         res.cookie('jwt', token, {
             httpOnly: true,
@@ -81,14 +94,14 @@ export async function login(req, res) {
             sameSite: 'strict',
         });
 
-        res.status(200).json({success:true, user});
-    } catch (error){
+        res.status(200).json({ success: true, user });
+    } catch (error) {
         console.error("Error in Login controller: ", error);
-        res.status(500).json({message: 'Internal Server error!'});
+        res.status(500).json({ message: 'Internal Server error!' });
     }
 }
 
 export function logout(req, res) {
     res.clearCookie('jwt');
-    res.status(200).json({success: true,message: 'Logout successfully!'});
+    res.status(200).json({ success: true, message: 'Logout successfully!' });
 }
