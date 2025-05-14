@@ -54,7 +54,38 @@ export async function signup(req, res) {
 }
 
 export async function login(req, res) {
-    res.send('Login Route!');
+    try{
+        const {email, password} = req.body;
+
+        if (!email || !password){
+            return res.status(400).json({message: 'Please fill all the fields!'});
+        }
+
+        const user = await User.findOne({email});
+        if (!user){
+            return res.status(400).json({message: 'Email or password is incorrect!'});
+        }
+        
+
+        const isMatch = await user.matchPassword(password);
+        if (!isMatch){
+            return res.status(400).json({message: 'Email or password is incorrect!'});
+        }
+
+        const token = jwt.sign({id: user._id}, process.env.JWT_SECRET_KEY, {expiresIn: '7d'});
+
+        res.cookie('jwt', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            sameSite: 'strict',
+        });
+
+        res.status(200).json({success:true, user});
+    } catch (error){
+        console.error("Error in Login controller: ", error);
+        res.status(500).json({message: 'Internal Server error!'});
+    }
 }
 
 export function logout(req, res) {

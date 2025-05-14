@@ -66,6 +66,12 @@ userSchema.pre("save", async function (next) {
     }
 });
 
+// So sánh mật khẩu khi đăng nhập
+userSchema.methods.matchPassword = async function (enterPassword) {
+    const isPasswordMatch = await bcrypt.compare(enterPassword, this.password);
+    return isPasswordMatch;
+};
+
 const User = mongoose.model("User", userSchema);
 
 export default User;
