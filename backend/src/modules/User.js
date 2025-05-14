@@ -49,8 +49,6 @@ const userSchema = new mongoose.Schema({
     ],
 }, { timestamps: true });
 
-const User = mongoose.model("User", userSchema);
-
 // So sánh mật khẩu
 userSchema.pre("save", async function (next) {
     // Nếu mật khẩu không thay đổi thì không cần mã hóa lại
@@ -67,5 +65,7 @@ userSchema.pre("save", async function (next) {
         next(error);
     }
 });
+
+const User = mongoose.model("User", userSchema);
 
 export default User;
