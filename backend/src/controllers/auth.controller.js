@@ -1,4 +1,5 @@
 import User from '../models/User.js';
+import jwt from 'jsonwebtoken';
 
 export async function signup(req, res) {
     // Lấy thông tin từ client
@@ -24,6 +25,16 @@ export async function signup(req, res) {
         if (existingUser){
             return res.status(400).json({message: 'Email already exists, please use another one!'});
         }
+
+        const idx = Math.floor(Math.random() * 100) + 1;
+        const ramdomAvartar = `https://avatar.iran.liara.run/public/${idx}.png`;
+        const newUser = new User({
+            fullName,
+            email,
+            password,
+            profilePicture: ramdomAvartar,
+        });
+
     } catch (error){
 
     }
