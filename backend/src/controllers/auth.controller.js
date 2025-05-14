@@ -1,4 +1,4 @@
-import User from '../models/User.js';
+import User from '../modules/User.js';
 import jwt from 'jsonwebtoken';
 
 export async function signup(req, res) {
@@ -28,7 +28,7 @@ export async function signup(req, res) {
 
         const idx = Math.floor(Math.random() * 100) + 1;
         const ramdomAvartar = `https://avatar.iran.liara.run/public/${idx}.png`;
-        const newUser = new User({
+        const newUser = new User.create({
             fullName,
             email,
             password,
