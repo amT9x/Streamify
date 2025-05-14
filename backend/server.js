@@ -4,8 +4,16 @@ import "dotenv/config";
 const app = express();
 const PORT = process.env.PORT;
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
+app.get('/api/auth/singup', (req, res) => {
+    res.send('Sign Up!');
+})
+
+app.get('/api/auth/login', (req, res) => {
+    res.send('Login!');
+})
+
+app.get('/api/auth/logout', (req, res) => {
+    res.send('Log Out!');
 })
 
 app.listen(PORT, () => {
