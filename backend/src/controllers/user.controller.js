@@ -1,4 +1,4 @@
-import FriendRequest from "../modules/FriendRequest";
+import FriendRequest from "../modules/FriendRequest.js";
 
 // Lấy danh sách người dùng đã đăng ký
 export async function getRecommendedUsers(req, res) {
@@ -105,6 +105,27 @@ export async function acceptFriendRequest(req, res) {
         res.status(200).json({message: "Friend request accepted!"}); // Trả về thông báo chấp nhận yêu cầu kết bạn
     } catch (error) {
         console.log("Error in acceptFriendRequest controller: ", error.message);
+        res.status(500).json({ message: 'Internal Server error!' });
+    }
+}
+
+export async function getFriendRequests(req, res) {
+    try {
+        const inComingRequests = await FriendRequest.find({
+            recipient: req.user._id,
+            status: "pending",
+        }).populate("sender", "fullName profilePicture nativeLanguage learningLanguage"); // Lấy danh sách yêu cầu kết bạn đến với người dùng hiện tại
+        const acceptedRequests = await FriendRequest.find({
+            recipient: req.user._id,
+            status: "accepted",
+        }).populate("sender", "fullName profilePicture"); // Lấy danh sách yêu cầu kết bạn đã chấp nhận với người dùng hiện tại
+
+        res.status(200).json({
+            inComingRequests,
+            acceptedRequests,
+        }); // Trả về danh sách yêu cầu kết bạn
+    } catch (error) {
+        console.log("Error in getFriendRequests controller: ", error.message);
         res.status(500).json({ message: 'Internal Server error!' });
     }
 }
