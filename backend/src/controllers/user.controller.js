@@ -76,3 +76,35 @@ export async function sendFriendRequest(req, res) {
         res.status(500).json({ message: 'Internal Server error!' });
     }
 }
+
+export async function acceptFriendRequest(req, res) {
+    try {
+        const {id: requestId} = req.params; // Lấy id yêu cầu từ params
+        const friendRequest = await FriendRequest.findById(requestId); // Tìm yêu cầu kết bạn theo id
+        
+        if(!friendRequest) {
+            return res.status(404).json({message: "Friend request not found!"}); // Yêu cầu kết bạn không tồn tại
+        }
+
+        // Xác minh người dùng hiện tại là người nhận
+        if(friendRequest.recipient.toString() !== req.user._id.toString()) {
+            return res.status(403).json({message: "You are not authorized to accept this friend request!"}); // Không có quyền chấp nhận yêu cầu này
+        }
+
+        friendRequest.status = "accepted"; // Cập nhật trạng thái yêu cầu kết bạn
+        await friendRequest.save(); // Lưu yêu cầu kết bạn đã cập nhật
+
+        // Cập nhật danh sách bạn bè của cả hai người
+        await User.findByIdAndUpdate(friendRequest.sender, {
+            $addToSet: { friends: friendRequest.recipient }, // Thêm người nhận vào danh sách bạn bè của người gửi
+        });
+        await User.findByIdAndUpdate(friendRequest.recipient, {
+            $addToSet: { friends: friendRequest.sender }, // Thêm người gửi vào danh sách bạn bè của người nhận
+        });
+
+        res.status(200).json({message: "Friend request accepted!"}); // Trả về thông báo chấp nhận yêu cầu kết bạn
+    } catch (error) {
+        console.log("Error in acceptFriendRequest controller: ", error.message);
+        res.status(500).json({ message: 'Internal Server error!' });
+    }
+}
