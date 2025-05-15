@@ -19,3 +19,12 @@ export const upsertStreamUser = async (userData) => {
         console.log('Error creating user stream:', error);
     }
 }
+
+export const generateStreamToken = (userId) => {
+    try {
+        const userIDString = userId.toString(); // Đảm bảo userId là chuỗi
+        return streamClient.createToken(userIDString); // Tạo token cho người dùng
+    } catch (error) {
+        console.log('Error generating Stream token:', error);
+    }
+}
