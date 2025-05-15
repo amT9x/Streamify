@@ -153,3 +153,8 @@ export async function onboard(req, res) {
         res.status(500).json({ message: 'Internal server error!' });
     }
 }
+
+// Kiểm tra xem người dùng đã đăng nhập hay chưa
+export async function me(req, res) {
+    res.status(200).json({ success: true, user: req.user });
+}
