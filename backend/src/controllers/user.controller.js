@@ -129,3 +129,17 @@ export async function getFriendRequests(req, res) {
         res.status(500).json({ message: 'Internal Server error!' });
     }
 }
+
+// Lấy danh sách yêu cầu kết bạn đã gửi đi
+export async function getOutgoingFriendRequests(req, res) {
+    try {
+        const outgoingRequests = await FriendRequest.find({
+            sender: req.user._id,
+            status: "pending",
+        }).populate("recipient", "fullName profilePicture nativeLanguage learningLanguage"); // Lấy danh sách yêu cầu kết bạn đã gửi đi
+        res.status(200).json(outgoingRequests); // Trả về danh sách yêu cầu kết bạn đã gửi đi
+    } catch (error) {
+        log("Error in getOutgoingFriendRequests controller: ", error.message);
+        res.status(500).json({ message: 'Internal Server error!' });
+    }
+}
