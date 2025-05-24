@@ -5,10 +5,15 @@ import userRoutes from './routes/user.route.js';
 import chatRoutes from './routes/chat.route.js';
 import { connectDB } from './lib/db.js';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 const app = express();
 const PORT = process.env.PORT;
 
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true, // Allow client to send cookies
+}));
 app.use(express.json()); // Middleware to parse JSON request body
 app.use(cookieParser()); // Middleware to parse cookies from request headers
 app.use('/api/auth', authRoutes);

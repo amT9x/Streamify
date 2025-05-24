@@ -10,14 +10,17 @@ import NotificationsPage from './pages/NotificationsPage.jsx'
 import { Toaster } from 'react-hot-toast'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios';
+import { axiosInstance } from './lib/axios.js'
 
 const App = () => {
+  const baseURL = 'http://localhost:5001/api/';
   const {data, isLoading, error} = useQuery({
     queryKey: ['data'],
     queryFn: async () => {
-      const res = await axios.get('https://jsonplaceholder.typicode.com/todos');
+      const res = await axiosInstance.get(baseURL + 'auth/me');
       return res.data;
-    }
+    },
+    retry: false, // không thử lại khi có lỗi
   });
   console.log(data);
 
