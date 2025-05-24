@@ -44,7 +44,7 @@ const SignUpPage = () => {
             <form onSubmit={handleSignup}>
               <div className="space-y-4">
                 <div>
-                  <h2 classname="text-xl font-semibold">Create an account</h2>
+                  <h2 className="text-xl font-semibold">Create an account</h2>
                   <p className="text-sm opacity-70">
                     Join Streamify and start your languagelearning adventure!
                   </p>
