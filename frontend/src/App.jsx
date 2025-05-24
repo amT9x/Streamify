@@ -8,28 +8,17 @@ import ChatPage from './pages/ChatPage.jsx'
 import CallPage from './pages/CallPage.jsx'
 import NotificationsPage from './pages/NotificationsPage.jsx'
 import { Toaster } from 'react-hot-toast'
+import { useQuery } from '@tanstack/react-query'
 
 const App = () => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const getData = async () => {
-      setLoading(true);
-      try {
-        const data = await fetch("https://jsonplaceholder.typicode.com/todos");
-        const json = await data.json();
-        setData(json);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getData();
-  }, []);
-
+  const {data, isLoading, error} = useQuery({
+    queryKey: ['data'],
+    queryFn: async () => {
+      const res = await fetch('https://jsonplaceholder.typicode.com/todos');
+      const data = await res.json();
+      return data;
+    }
+  });
   console.log(data);
 
   return (
