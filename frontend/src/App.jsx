@@ -9,14 +9,14 @@ import CallPage from './pages/CallPage.jsx'
 import NotificationsPage from './pages/NotificationsPage.jsx'
 import { Toaster } from 'react-hot-toast'
 import { useQuery } from '@tanstack/react-query'
+import axios from 'axios';
 
 const App = () => {
   const {data, isLoading, error} = useQuery({
     queryKey: ['data'],
     queryFn: async () => {
-      const res = await fetch('https://jsonplaceholder.typicode.com/todos');
-      const data = await res.json();
-      return data;
+      const res = await axios.get('https://jsonplaceholder.typicode.com/todos');
+      return res.data;
     }
   });
   console.log(data);
