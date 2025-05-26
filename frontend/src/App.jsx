@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react'
 import { Navigate, Route, Routes } from 'react-router'
 import HomePage from './pages/HomePage.jsx'
 import SignUpPage from './pages/SignUpPage.jsx'
@@ -8,25 +7,14 @@ import ChatPage from './pages/ChatPage.jsx'
 import CallPage from './pages/CallPage.jsx'
 import NotificationsPage from './pages/NotificationsPage.jsx'
 import { Toaster } from 'react-hot-toast'
-import { useQuery } from '@tanstack/react-query'
-import axios from 'axios';
-import { axiosInstance } from './lib/axios.js'
 import PageLoader from './components/PageLoader.jsx'
+import useAuthUser from './hooks/useAuthUser.js'
 
 const App = () => {
-  const baseURL = 'http://localhost:5001/api/';
-  const {data:authData, isLoading, error} = useQuery({
-    queryKey: ['authUser'],
-    queryFn: async () => {
-      const res = await axiosInstance.get(baseURL + 'auth/me');
-      return res.data;
-    },
-    retry: false, // không thử lại khi có lỗi
-  });
 
-  if (isLoading) return <PageLoader />; // Giả sử bạn muốn hiển thị PageLoader trong khi đang tải dữ liệu
-  
-  const authUser = authData?.user
+  const {isLoading, authUser} = useAuthUser();
+
+  if (isLoading) return <PageLoader />;
 
   return (
     <div className= 'h-screen' data-theme="night">
