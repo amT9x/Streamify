@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import useAuthUser from '../hooks/useAuthUser'
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { completeOnboarding } from '../lib/api';
+import { CameraIcon } from 'lucide-react';
 
 const OnBoardingPage = () => {
   const {authUser} = useAuthUser();
