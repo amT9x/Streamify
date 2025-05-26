@@ -11,6 +11,7 @@ import { Toaster } from 'react-hot-toast'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios';
 import { axiosInstance } from './lib/axios.js'
+import PageLoader from './components/PageLoader.jsx'
 
 const App = () => {
   const baseURL = 'http://localhost:5001/api/';
@@ -22,6 +23,8 @@ const App = () => {
     },
     retry: false, // không thử lại khi có lỗi
   });
+
+  if (isLoading) return <PageLoader />; // Giả sử bạn muốn hiển thị PageLoader trong khi đang tải dữ liệu
   
   const authUser = authData?.user
 
