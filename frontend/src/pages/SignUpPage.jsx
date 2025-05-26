@@ -37,6 +37,14 @@ const SignUpPage = () => {
             Streamify
             </span>
           </div>
+
+          {/* Error */}
+          {error && (
+            <div className="alert alert-error mb-4">
+              <span>{error.response.data.message}</span>
+            </div>
+          )} 
+
           {/* Form */}
           <div className="w-full">
             <form onSubmit={handleSignup}>
