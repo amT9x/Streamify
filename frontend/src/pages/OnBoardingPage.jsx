@@ -5,7 +5,7 @@ import { completeOnboarding } from '../lib/api';
 import { CameraIcon } from 'lucide-react';
 
 const OnBoardingPage = () => {
-  const {authUser} = useAuthUser();
+  const { authUser } = useAuthUser();
   const queryClient = useQueryClient();
   const [formState, setFormState] = useState({
     fullName: authUser?.fullName || "",
@@ -16,11 +16,11 @@ const OnBoardingPage = () => {
     profilePicture: authUser?.profilePicture || "",
   });
 
-  const {mutate: onboardingMutation, isPending} = useMutation({
+  const { mutate: onboardingMutation, isPending } = useMutation({
     mutationFn: completeOnboarding,
     onSuccess: () => {
       toast.success("Profile onboarding success!");
-      queryClient.invalidateQueries({queryKey: ['authUser']});
+      queryClient.invalidateQueries({ queryKey: ['authUser'] });
     }
   });
 
@@ -39,18 +39,18 @@ const OnBoardingPage = () => {
             <div className="flex flex-col items-center justify-center space-y-4">
               {/* Image preview */}
               <div className="size-32 rounded-full bg-base-300 overflow-hidden">
-                {formState?.profilePicture ? 
-                (
-                  <img 
-                    src={formState.profilePicture} 
-                    alt="Profile" 
-                    className="w-full h-full object-cover" />
-                ) :
-                (
-                  <div className="flex items-center justify-center h-full">
-                    <CameraIcon className="size-12 text-base-content opacity-40" />
-                  </div>
-                )
+                {formState?.profilePicture ?
+                  (
+                    <img
+                      src={formState.profilePicture}
+                      alt="Profile"
+                      className="w-full h-full object-cover" />
+                  ) :
+                  (
+                    <div className="flex items-center justify-center h-full">
+                      <CameraIcon className="size-12 text-base-content opacity-40" />
+                    </div>
+                  )
                 }
               </div>
             </div>
