@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import useAuthUser from '../hooks/useAuthUser'
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { completeOnboarding } from '../lib/api';
-import { CameraIcon } from 'lucide-react';
+import { CameraIcon, ShuffleIcon } from 'lucide-react';
 
 const OnBoardingPage = () => {
   const { authUser } = useAuthUser();
@@ -29,6 +29,8 @@ const OnBoardingPage = () => {
     onboardingMutation(formState);
   }
 
+  const handleRandomAvartar = () => {}
+
   return (
     <div className="min-h-screen ba-base-100 flex items-center justify-center p-4">
       <div className="card bg-base-200 w-full max-w-3xl shadow-xl">
@@ -52,6 +54,12 @@ const OnBoardingPage = () => {
                     </div>
                   )
                 }
+              </div>
+              {/* Generation random avatar Button */}
+              <div className="flex items-center gap-2">
+                <button type="button" onClick={handleRandomAvartar} className="btn btn-accent" style={{backgroundColor: "#20b6aa", borderColor: "#20b6aa"}}>
+                  <span>{<ShuffleIcon className="size-4 mr-2"/>}</span>Generate Random Avatar
+                </button>
               </div>
             </div>
           </form>
