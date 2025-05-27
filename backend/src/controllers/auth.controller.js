@@ -109,8 +109,8 @@ export function logout(req, res) {
 //export funtion onboard
 export async function onboard(req, res) {
     try {
-        const userId = req.user._id;
-        const { fullName, nativeLanguage, learningLanguage, location, bio } = req.body;
+        const userId = req.user._id; // lấy từ middleware protectRoute (protecRoute đã xử lý jwt)
+        const { fullName, nativeLanguage, learningLanguage, location, bio } = req.body; // lấy từ request body(thông tin frontend gửi lên)
 
         // Kiểm tra thông tin nhập vào có thiếu trường nào không?
         if (!fullName || !nativeLanguage || !learningLanguage || !location || !bio) {
@@ -126,6 +126,7 @@ export async function onboard(req, res) {
             });
         }
 
+        // Cập nhật dữ liệu và lưu vào MongoDB
         const updatedUser = await User.findByIdAndUpdate(userId, {
             ...req.body,
             isOnBoarded: true
@@ -146,7 +147,7 @@ export async function onboard(req, res) {
         } catch (streamError) {
             console.log('Error updating user stream in controller:', streamError.message);
         }
-
+        // Trả về frontend (trả về client: client sẽ nhận ở file src/lib/api.js: trong mục "return res.data;")
         res.status(200).json({ success: true, user: updatedUser });
     } catch (error) {
         console.log('Error in onboard controller:', error);
