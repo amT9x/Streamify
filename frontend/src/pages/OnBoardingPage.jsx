@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import useAuthUser from '../hooks/useAuthUser'
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { completeOnboarding } from '../lib/api';
-import { CameraIcon, ShuffleIcon } from 'lucide-react';
+import { CameraIcon, LoaderIcon, MapPinIcon, ShipWheel, ShuffleIcon } from 'lucide-react';
 import { LANGUAGES } from '../constants';
 
 const OnBoardingPage = () => {
@@ -125,7 +125,41 @@ const OnBoardingPage = () => {
                 </div>
               </div>
               {/* Locations */}
-              {/* Complete Button */}
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Location</span>
+                </label>
+                <div className="relative">
+                  <MapPinIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content opacity-70" />
+                  <input
+                  type="text"
+                  name="location"
+                  placeholder="City, Country"
+                  value={formState.location}
+                  onChange={(e) => setFormState({...formState, location: e.target.value})}
+                  className="input input-bordered w-full pl-10" />
+                </div>
+              </div>
+              {/* Submit Button */}
+              <button
+                className="btn btn-primary w-full"
+                disabled={isPending}
+                type="submit">
+                {!isPending ?
+                (
+                  <>
+                    <ShipWheel className="size-4 mr-2" />
+                    Complete Onboarding
+                  </>
+                ) :
+                (
+                  <>
+                    <LoaderIcon className="size-4 mr-2" />
+                    OnBoarding...
+                  </>
+                )
+                }
+              </button>
           </form>
         </div>
       </div>
