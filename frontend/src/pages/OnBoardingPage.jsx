@@ -30,7 +30,15 @@ const OnBoardingPage = () => {
     onboardingMutation(formState);
   }
 
-  const handleRandomAvartar = () => {}
+  const handleRandomAvartar = () => {
+    const idx = Math.floor(Math.random() * 100) + 1;
+    const randomAvatarUrl = `https://avatar.iran.liara.run/public/${idx}.png`;
+    setFormState((prevState) => ({
+      ...prevState,
+      profilePicture: randomAvatarUrl
+    }));
+    toast.success("Avatar generated!");
+  }
 
   return (
     <div className="min-h-screen ba-base-100 flex items-center justify-center p-4">
