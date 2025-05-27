@@ -3,6 +3,7 @@ import useAuthUser from '../hooks/useAuthUser'
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { completeOnboarding } from '../lib/api';
 import { CameraIcon, ShuffleIcon } from 'lucide-react';
+import { LANGUAGES } from '../constants';
 
 const OnBoardingPage = () => {
   const { authUser } = useAuthUser();
@@ -62,6 +63,69 @@ const OnBoardingPage = () => {
                 </button>
               </div>
             </div>
+              {/* Full name */}
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Full Name</span>
+                </label>
+                <input
+                  type="text"
+                  name="fullName"
+                  placeholder="Your full name"
+                  value={formState.fullName}
+                  onChange={(e) => setFormState({...formState, fullName: e.target.value})}
+                  className="input input-bordered w-full" />
+              </div>
+              {/* Bio */}
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Bio</span>
+                </label>
+                <input
+                  type="text"
+                  name="bio"
+                  placeholder="Tell others about yourself and your language learning goals"
+                  value={formState.bio}
+                  onChange={(e) => setFormState({...formState, bio: e.target.value})}
+                  className="textarea textarea-bordered h-24" />
+              </div>
+              {/* Languages */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Native Language */}
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Native Language</span>
+                  </label>
+                  <select
+                    name="nativeLanguage"
+                    value={formState.nativeLanguage}
+                    onChange={(e) => setFormState({...formState, nativeLanguage: e.target.value})}
+                    className="select select-bordered w-full">
+                    <option value="">Select your native language</option>
+                    {LANGUAGES.map((lang) => (
+                      <option key={`native-${lang}`} value={lang.toLowerCase()}>{lang}</option>
+                    ))}
+                  </select>
+                </div>
+                {/* Learning Language */}
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Learn Language</span>
+                  </label>
+                  <select
+                    name="learningLanguage"
+                    value={formState.learningLanguage}
+                    onChange={(e) => setFormState({...formState, learningLanguage: e.target.value})}
+                    className="select select-bordered w-full">
+                    <option value="">Select your learning language</option>
+                    {LANGUAGES.map((lang) => (
+                    <option key={`native-${lang}`} value={lang.toLowerCase()}>{lang}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              {/* Locations */}
+              {/* Complete Button */}
           </form>
         </div>
       </div>
