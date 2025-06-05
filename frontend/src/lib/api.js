@@ -5,6 +5,11 @@ export const signup = async (signupData) => {
     return res.data;
 }
 
+export const login = async (loginData) => {
+    const res = await axiosInstance.post('http://localhost:5001/api/auth/login', loginData);
+    return res.data;
+}
+
 export const getAuthUser = async () => {
     const res = await axiosInstance.get('http://localhost:5001/api/auth/me');
     return res.data;
