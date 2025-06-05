@@ -54,8 +54,8 @@ const SignUpPage = () => {
                     Join Streamify and start your languagelearning adventure!
                   </p>
                 </div>
-                {/* Fullname */}
                 <div className="space-y-3">
+                  {/* Fullname */}
                   <div className="form-control w-full">
                     <label className="label">
                       <span className="label-text">Full Name</span>
