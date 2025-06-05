@@ -1,14 +1,12 @@
 import React, { useState } from 'react'
 import useAuthUser from '../hooks/useAuthUser'
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { completeOnboarding } from '../lib/api';
 import { CameraIcon, LoaderIcon, MapPinIcon, ShipWheel, ShuffleIcon } from 'lucide-react';
 import { LANGUAGES } from '../constants';
 import { toast } from 'react-hot-toast';
+import useOnBoarding from '../hooks/useOnBoarding';
 
 const OnBoardingPage = () => {
   const { authUser } = useAuthUser();
-  const queryClient = useQueryClient();
   const [formState, setFormState] = useState({
     fullName: authUser?.fullName || "",
     bio: authUser?.bio || "",
@@ -18,16 +16,7 @@ const OnBoardingPage = () => {
     profilePicture: authUser?.profilePicture || "",
   });
 
-  const { mutate: onboardingMutation, isPending } = useMutation({
-    mutationFn: completeOnboarding,
-    onSuccess: () => {
-      toast.success("Profile onboarding success!");
-      queryClient.invalidateQueries({ queryKey: ['authUser'] });
-    },
-    onError: (error) => {
-      toast.error(error?.response?.data?.message);
-    }
-  });
+  const { onboardingMutation, isPending } = useOnBoarding();
 
   const handleSubmit = (e) => {
     e.preventDefault(); // ngăn trình duyệt reload lại trang mặc định khi submit form
