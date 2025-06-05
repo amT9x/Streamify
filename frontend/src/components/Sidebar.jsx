@@ -22,7 +22,13 @@ const SideBar = () => {
             <nav className="flex-1 p-4 space-y-1">
                 <Link
                     to="/"
-                    className={"btn btn-ghost justify-start w-full gap-3 px-3 normal-case"}
+                    className={
+                        `btn btn-ghost justify-start w-full gap-3 px-3 normal-case
+                        ${currentPath === "/" ?
+                            "btn-active" :
+                            ""
+                        }
+                    `}
                 >
                     <HomeIcon className="size-5 text-base-content opacity-70" />
                     <span>Home</span>
