@@ -10,6 +10,11 @@ export const login = async (loginData) => {
     return res.data;
 }
 
+export const logout = async () => {
+    const res = await axiosInstance.post('http://localhost:5001/api/auth/logout');
+    return res.data;
+}
+
 export const getAuthUser = async () => {
     const res = await axiosInstance.get('http://localhost:5001/api/auth/me');
     return res.data;
