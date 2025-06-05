@@ -1,30 +1,15 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { logout } from "../lib/api";
-import toast from "react-hot-toast";
 import useAuthUser from "../hooks/useAuthUser";
 import { Link, useLocation } from "react-router";
 import { BellIcon, LogOutIcon, ShipWheelIcon } from "lucide-react";
 import ThemeSelector from "./ThemeSelector";
+import useLogout from "../hooks/useLogout";
 
 const NavBar = () => {
     const { authUser } = useAuthUser();
     const location = useLocation();
     const isChatPage = location.pathname?.startsWith("/chat");
 
-    const queryClient = useQueryClient();
-
-    const { mutate: logoutMutation, isPending, error } = useMutation({
-        mutationFn: logout,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['authUser'] });
-            toast.success("Logged out successfully");
-        },
-    });
-
-    const handleLogout = (e) => {
-        e.preventDefault();
-        logoutMutation();
-    }
+    const {logoutMutation} = useLogout();
 
     return (
         <nav className="bg-base-200 border-b border-base-300 sticky top-0 z-30 h-16 flex items-center">
@@ -60,7 +45,7 @@ const NavBar = () => {
                     </div>
 
                     {/* Logout Button */}
-                    <button onClick={handleLogout} className="btn btn-ghost btn-circle">
+                    <button onClick={logoutMutation} className="btn btn-ghost btn-circle">
                         <LogOutIcon className="h-6 w-6 text-base-content opacity-70" />
                     </button>
 
