@@ -17,7 +17,7 @@ const App = () => {
   const {isLoading, authUser} = useAuthUser();
   const isAuthenticated = Boolean(authUser);
   const isOnBoarded = authUser?.isOnBoarded;
-  const {theme} = useThemeStore();
+  const {theme, setTheme} = useThemeStore();
 
   if (isLoading) return <PageLoader />;
 
