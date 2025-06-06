@@ -29,7 +29,18 @@ const ThemeSelector = () => {
               `}
               onClick={() => setTheme(themeOption.name)} 
             >
-
+              <PaletteIcon className="size-4" />
+              <span className="text-sm font-medium">{themeOption.label}</span>
+              {/* theme preview */}
+              <div className="ml-auto flex gap-1">
+                {themeOption.colors.map((color, index) => (
+                  <span
+                    key={index}
+                    className="size-2 rounded-full"
+                    style={{ backgroundColor: color }}
+                  ></span>
+                ))}
+              </div>
             </button>
           ))}
         </div>
