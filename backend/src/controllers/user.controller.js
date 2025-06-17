@@ -1,4 +1,5 @@
 import FriendRequest from "../modules/FriendRequest.js";
+import User from "../modules/User.js";
 
 // Lấy danh sách người dùng đã đăng ký
 export async function getRecommendedUsers(req, res) {
