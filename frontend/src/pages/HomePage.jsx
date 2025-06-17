@@ -39,7 +39,7 @@ const HomePage = () => {
       })
       setOutgoingRequestsIds(outGoingIds)
     } else {
-      console.log("No outgoing friend requests found")
+      //console.log("No outgoing friend requests found")
     }
   }, [outgoingFriendRequests])
 
