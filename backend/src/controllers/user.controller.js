@@ -16,7 +16,7 @@ export async function getRecommendedUsers(req, res) {
                 { isOnBoarded: true },
             ],
         });
-        res.status(200).json({recommendedUsers: recommendedUsers}); // Trả về danh sách người dùng đã đăng ký
+        res.status(200).json(recommendedUsers); // Trả về danh sách người dùng đã đăng ký
     } catch (error) {
         console.log("Error in getRecommendedUsers controller: ", error);
         res.status(500).json({ message: 'Internal Server error!' });
