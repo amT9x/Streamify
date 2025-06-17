@@ -36,6 +36,9 @@ const HomePage = () => {
       outgoingFriendRequests.forEach(request => {
         outGoingIds.add(request.id)
       })
+      setOutgoingRequestsIds(outGoingIds)
+    } else {
+      console.log("No outgoing friend requests found")
     }
   }, [outgoingFriendRequests])
 
@@ -55,7 +58,7 @@ const HomePage = () => {
             <span className="loading loading-spinner loading-lg" />
           </div>
         ) : myFriends.length === 0 ? (
-          <p>No frients yet</p>
+          <p>No friends yet</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {myFriends.map((friend) => (
