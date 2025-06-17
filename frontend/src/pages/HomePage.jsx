@@ -3,6 +3,7 @@ import { getMyFriends, getOutgoingFriendRequests, getRecommendedUsers, sendFrien
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router";
 import { UserIcon } from "lucide-react";
+import FriendCard from "../components/FriendCard";
 
 const HomePage = () => {
   const queryClient = useQueryClient()
@@ -48,6 +49,20 @@ const HomePage = () => {
             Friend Requests
           </Link>
         </div>
+
+        {loadingMyFriends ? (
+          <div className="flex justify-center py-12">
+            <span className="loading loading-spinner loading-lg" />
+          </div>
+        ) : myFriends.length === 0 ? (
+          <p>No frients yet</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {myFriends.map((friend) => (
+              <FriendCard key={friend._id} friend={friend} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )
