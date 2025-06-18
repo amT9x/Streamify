@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { getMyFriends, getOutgoingFriendRequests, getRecommendedUsers, sendFriendRequest } from "../lib/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router";
-import { MapPinIcon, UserIcon } from "lucide-react";
-import FriendCard from "../components/FriendCard";
+import { CheckCircleIcon, MapPinIcon, UserIcon, UserPlusIcon } from "lucide-react";
+import FriendCard, { getLanguageFlag } from "../components/FriendCard";
 import NoFriendsFound from "../components/NoFriendsFound";
 
 const HomePage = () => {
@@ -116,9 +116,46 @@ const HomePage = () => {
                           )}
                         </div>
                       </div>
+
+                      {/* Language & Flag */}
+                      <div className="flex flex-wrap gap-1.5 mb-3">
+                        <span className="badge badge-secondary text-xs">
+                          {getLanguageFlag(user.nativeLanguage)}
+                          Native: {capitialize(user.nativeLanguage)}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 mb-3">
+                        <span className="badge badge-secondary text-xs">
+                          {getLanguageFlag(user.learningLanguage)}
+                          Learning: {capitialize(user.learningLanguage)}
+                        </span>
+                      </div>
+
+                      {/* Bio */}
+                      {user.bio && <p className="text-sm opacity-70">{user.bio}</p>}
+
+                      {/* Button Send request */}
+                      <button
+                        onClick={() => sendRequestMutation(user._id)}
+                        disabled={hasRequestBentSent || isPending}
+                        className={`btn w-full mt-2 ${hasRequestBentSent ? "btn-disabled" : "btn-primary"}`}
+                      >
+                        {hasRequestBentSent ? (
+                          <>
+                            <CheckCircleIcon className="size-4 me-2" />
+                            Request Sent
+                          </>
+                        ) : (
+                          <>
+                            <UserPlusIcon className="size-4 me-2" />
+                            Send Friend Request
+                          </>
+                        )}
+                      </button>
                     </div>
                   </div>
-              )})}
+                )
+              })}
             </div>
           )}
         </section>
@@ -128,3 +165,5 @@ const HomePage = () => {
 }
 
 export default HomePage
+
+const capitialize = (str) => str.charAt(0).toUpperCase() + str.slice(1); // hàm để viết hoa chữ cái đầu tiên của chuỗi
