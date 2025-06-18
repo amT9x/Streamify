@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { acceptFriendRequest, getFriendRequests } from "../lib/api"
+import { BellIcon, ClockIcon, MessageSquareIcon } from "lucide-react"
 
 const NotificationsPage = () => {
 
@@ -75,6 +76,52 @@ const NotificationsPage = () => {
                 ))}
               </section>
             )}
+
+            {/* Accept reqs notifications */}
+            {acceptedRequests.length > 0 && 
+              <section className="space-y-4">
+                <h2 className="text-xl font-semibold flex items-center gap-2">
+                  <BellIcon className="w-5 h-5 text-success" />
+                  New Connections
+                </h2>
+
+                <div>
+                  {acceptedRequests.map((notifications) => (
+                    <div
+                      key={notifications._id}
+                      className="card bg-base-200 shadow-sm"
+                    >
+                      <div className="card-body p-4">
+                        <div className="flex items-start gap-3">
+                          <div className="avatar mt-1 size-10 rounded-full">
+                            <img
+                              src={notifications.recipient.profilePicture}
+                              alt={notifications.recipient.fullName}
+                            />
+                          </div>
+
+                          <div className="flex-1">
+                            <h3 className="font-semibold">{notifications.recipient.fullName}</h3>
+                            <p className="text-sm my-1">
+                              {notifications.recipient.fullName} accepted your friend request.
+                            </p>
+                            <p className="text-xs flex items-center opacity-70">
+                              <ClockIcon className="w-3 h-3 mr-1" />
+                              Recently
+                            </p>
+                          </div>
+
+                          <div className="badge badge-success">
+                            <MessageSquareIcon className="w-3 h-3 mr-1" />
+                            New Friend
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            }
           </>
         )}
       </div>
