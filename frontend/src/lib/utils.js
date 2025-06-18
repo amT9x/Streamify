@@ -1,0 +1,1 @@
+export const capitialize = (str) => str.charAt(0).toUpperCase() + str.slice(1); // hàm để viết hoa chữ cái đầu tiên của chuỗi

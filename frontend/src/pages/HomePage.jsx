@@ -5,6 +5,7 @@ import { Link } from "react-router";
 import { CheckCircleIcon, MapPinIcon, UserIcon, UserPlusIcon } from "lucide-react";
 import FriendCard, { getLanguageFlag } from "../components/FriendCard";
 import NoFriendsFound from "../components/NoFriendsFound";
+import { capitialize } from "../lib/utils";
 
 const HomePage = () => {
   const queryClient = useQueryClient()
@@ -166,5 +167,3 @@ const HomePage = () => {
 }
 
 export default HomePage
-
-const capitialize = (str) => str.charAt(0).toUpperCase() + str.slice(1); // hàm để viết hoa chữ cái đầu tiên của chuỗi
