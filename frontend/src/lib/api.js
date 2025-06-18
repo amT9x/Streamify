@@ -49,3 +49,13 @@ export async function sendFriendRequest(userId) {
     const res = await axiosInstance.post(`http://localhost:5001/api/users/friend-request/${userId}`);
     return res.data;
 }
+
+export async function getFriendRequests() {
+    const res = await axiosInstance.get('http://localhost:5001/api/users/friend-requests');
+    return res.data;
+}
+
+export async function acceptFriendRequest(requestId) {
+    const res = await axiosInstance.put(`http://localhost:5001/api/users/friend-request/${requestId}/accept`);
+    return res.data;
+}
