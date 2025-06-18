@@ -35,7 +35,8 @@ const HomePage = () => {
     
     if (outgoingFriendRequests && outgoingFriendRequests.length > 0) {
       outgoingFriendRequests.forEach(request => {
-        outGoingIds.add(request.id)
+        console.log(request)
+        outGoingIds.add(request.recipient._id) // 
       })
       setOutgoingRequestsIds(outGoingIds)
     } else {
